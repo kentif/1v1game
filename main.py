@@ -1,4 +1,5 @@
 import pygame
+from player_1 import Player_1
 
 pygame.init()
 pygame.font.init()
@@ -14,10 +15,12 @@ title_screen = True
 run = True
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
-display_instructions_1 = my_font.render("Player 1: WASD for movement  C to jump E to shoot", True, (235, 52, 52))
-display_instructions_2 = my_font.render("Player 2: IJKL for movement  . to jump O to shoot", True, (235, 52, 52))
+display_instructions_1 = my_font.render("Player 1: AD for movement  W to jump E to shoot", True, (235, 52, 52))
+display_instructions_2 = my_font.render("Player 2: JL for movement  I to jump O to shoot", True, (235, 52, 52))
 display_rule = my_font.render("Kill the enemy player first to win ", True, (235, 52, 52))
 display_start = my_font.render("Click anywhere to start", True, (235, 52, 52))
+
+p1 = Player_1(200, 200)
 
 # -------- Main Program Loop -----------
 frame = 0
@@ -38,6 +41,19 @@ while run:
                 title_screen = False
     else:
         screen.blit(bg, (0, 0))
+        screen.blit(p1.image, (200, 200))
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_d]:
+            p1.move_direction("right")
+            p1.switch_image()
+        if keys[pygame.K_a]:
+            p1.move_direction("left")
+            p1.switch_image()
+        if keys[pygame.K_w]:
+            p1.move_direction("up")
+        if keys[pygame.K_s]:
+            p1.move_direction("down")
+
         pygame.display.update()
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
