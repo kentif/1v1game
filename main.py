@@ -1,5 +1,6 @@
 import pygame
-from player_1 import Player_1
+from player_1 import Player1
+from player_2 import Player2
 
 pygame.init()
 pygame.font.init()
@@ -20,7 +21,8 @@ display_instructions_2 = my_font.render("Player 2: JL for movement  I to jump O 
 display_rule = my_font.render("Kill the enemy player first to win ", True, (235, 52, 52))
 display_start = my_font.render("Click anywhere to start", True, (235, 52, 52))
 
-p1 = Player_1(200, 200)
+p1 = Player1(200, 400)
+p2 = Player2(1000, 400)
 
 # -------- Main Program Loop -----------
 frame = 0
@@ -41,7 +43,8 @@ while run:
                 title_screen = False
     else:
         screen.blit(bg, (0, 0))
-        screen.blit(p1.image, (200, 200))
+        screen.blit(p1.image, p1.rect)
+        screen.blit(p2.image, p2.rect)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:
             p1.move_direction("right")
@@ -53,7 +56,16 @@ while run:
             p1.move_direction("up")
         if keys[pygame.K_s]:
             p1.move_direction("down")
-
+        if keys[pygame.K_l]:
+            p2.move_direction("right")
+            p2.switch_image()
+        if keys[pygame.K_j]:
+            p2.move_direction("left")
+            p2.switch_image()
+        if keys[pygame.K_i]:
+            p2.move_direction("up")
+        if keys[pygame.K_k]:
+            p2.move_direction("down")
         pygame.display.update()
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
