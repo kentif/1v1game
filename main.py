@@ -7,7 +7,7 @@ pygame.font.init()
 my_font = pygame.font.SysFont('Arial', 20)
 pygame.display.set_caption("1v1")
 
-size = (1138, 600)
+size = (1072, 600)
 screen = pygame.display.set_mode(size)
 
 bg = pygame.image.load("background.png")
@@ -16,13 +16,13 @@ title_screen = True
 run = True
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
-display_instructions_1 = my_font.render("Player 1: AD for movement  W to jump E to shoot", True, (235, 52, 52))
-display_instructions_2 = my_font.render("Player 2: JL for movement  I to jump O to shoot", True, (235, 52, 52))
+display_instructions_1 = my_font.render("Player 1: WASD for movement E to shoot", True, (235, 52, 52))
+display_instructions_2 = my_font.render("Player 2: IJKL for movement O to shoot", True, (235, 52, 52))
 display_rule = my_font.render("Kill the enemy player first to win ", True, (235, 52, 52))
 display_start = my_font.render("Click anywhere to start", True, (235, 52, 52))
 
-p1 = Player1(200, 400)
-p2 = Player2(1000, 400)
+p1 = Player1(255, 400)
+p2 = Player2(650, 400)
 
 # -------- Main Program Loop -----------
 frame = 0

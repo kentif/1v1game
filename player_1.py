@@ -1,5 +1,5 @@
 import pygame
-
+import time
 
 class Player1:
 
@@ -15,11 +15,13 @@ class Player1:
 
     def switch_image(self):
         image_number = 0
-        if not self.move:
+        current_time = time.time()
+        elapsed_time = time.time() - current_time
+        if elapsed_time > 1:
             image_number = 1
+            elapsed_time = 0
         self.image = pygame.image.load(self.image_list[image_number])
         self.image_size = self.image.get_size()
-        self.move = not self.move
 
     def move_direction(self, direction):
         if direction == "right":
