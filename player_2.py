@@ -10,7 +10,7 @@ class Player2:
         self.image = pygame.image.load(self.image_list[0])
         self.image_size = self.image.get_size()
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        self.delta = 3
+        self.delta = 2
         self.move = False
 
     def switch_image(self):
