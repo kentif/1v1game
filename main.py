@@ -23,8 +23,10 @@ display_start = my_font.render("Click anywhere to start", True, (235, 52, 52))
 
 p1 = Player1(255, 100)
 p2 = Player2(700, 100)
-counter = 0
-counter2 = 0
+counter_right1 = 0
+counter_left1 = 0
+counter_right2 = 0
+counter_left2 = 0
 
 # -------- Main Program Loop -----------
 frame = 0
@@ -50,32 +52,32 @@ while run:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:
             p1.move_direction("right")
-            counter = counter + 1
-            if counter == 20:
+            counter_right1 = counter_right1 + 1
+            if counter_right1 == 20:
                 p1.switch_image()
-                counter = 0
+                counter_right1 = 0
         if keys[pygame.K_a]:
             p1.move_direction("left")
-            counter = counter + 1
-            if counter == 20:
+            counter_left1 = counter_left1 + 1
+            if counter_left1 == 20:
                 p1.switch_image()
-                counter = 0
+                counter_left1 = 0
         if keys[pygame.K_w]:
             p1.move_direction("up")
         if keys[pygame.K_s]:
             p1.move_direction("down")
         if keys[pygame.K_l]:
             p2.move_direction("right")
-            counter2 = counter2 + 1
-            if counter2 == 20:
+            counter_right2 = counter_right2 + 1
+            if counter_right2 == 20:
                 p2.switch_image()
-                counter2 = 0
+                counter_right2 = 0
         if keys[pygame.K_j]:
             p2.move_direction("left")
-            counter2 = counter2 + 1
-            if counter2 == 20:
+            counter_left2 = counter_left2 + 1
+            if counter_left2 == 20:
                 p2.switch_image()
-                counter2 = 0
+                counter_left2 = 0
         if keys[pygame.K_i]:
             p2.move_direction("up")
         if keys[pygame.K_k]:
