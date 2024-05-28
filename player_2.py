@@ -8,42 +8,47 @@ class Player2:
         self.y = y
         self.image_list = ["player2standing.png", "player2running.png"]
         self.image = pygame.image.load(self.image_list[0])
+        self.image2 = pygame.image.load(self.image_list[1])
+        self.images = [self.image, self.image2]
+        self.flipped_image = pygame.transform.flip(self.image, True, False)
+        self.flipped_image2 = pygame.transform.flip(self.image2, True, False)
+        self.flipped_images = [self.flipped_image, self.flipped_image2]
+        self.image = self.images[0]
         self.image_size = self.image.get_size()
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
         self.delta = 2
         self.move = False
         self.current_direction = "right"
 
+    def move_direction(self, direction):
+        if direction == "right" and self.current_direction == "left":
+            self.current_direction = "right"
+        if direction == "left" and self.current_direction == "right":
+            self.current_direction = "left"
+        if direction == "right":
+            self.x += self.delta
+        if direction == "left":
+            self.x -= self.delta
+        if direction == "down":
+            self.y += self.delta
+        if direction == "up":
+            self.y -= self.delta
+
+        self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
+
     def switch_image(self):
-        image_number = 0
-        if not self.move:
-            image_number = 1
-        self.image = pygame.image.load(self.image_list[image_number])
+        if self.move:
+            if self.current_direction == "right":
+                self.image = self.images[1]
+            else:
+                self.image = self.flipped_images[1]
+        else:
+            if self.current_direction == "right":
+                self.image = self.images[0]
+            else:
+                self.image = self.flipped_images[0]
+
         self.image_size = self.image.get_size()
         self.move = not self.move
 
-    def move_direction(self, direction):
-        if self.current_direction == "right" and direction == "left":
-            self.image = pygame.image.load(self.image_list[0])
-            self.image = pygame.transform.flip(self.image, True, False)
-            self.image = pygame.image.load(self.image_list[1])
-            self.image = pygame.transform.flip(self.image, True, False)
-        if self.current_direction == "left" and direction == "right":
-            self.image = pygame.image.load(self.image_list[0])
-            self.image = pygame.transform.flip(self.image, True, False)
-            self.image = pygame.image.load(self.image_list[1])
-            self.image = pygame.transform.flip(self.image, True, False)
-        if direction == "right":
-            self.current_direction = "right"
-            self.x = self.x + self.delta
-            self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "left":
-            self.current_direction = "left"
-            self.x = self.x - self.delta
-            self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "down":
-            self.y = self.y + self.delta
-            self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
-        if direction == "up":
-            self.y = self.y - self.delta
-            self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
+
