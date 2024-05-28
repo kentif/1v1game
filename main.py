@@ -11,9 +11,17 @@ size = (1072, 600)
 screen = pygame.display.set_mode(size)
 
 bg = pygame.image.load("background.png")
+bullet_image = pygame.image.load("bullet.png")
+bullet_x = 0
+bullet_y = 0
+bullet2_image = pygame.image.load("bullet.png")
+bullet2_x = 0
+bullet2_y = 0
 
 title_screen = True
 run = True
+shoot = False
+shoot2 = False
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
 display_instructions_1 = my_font.render("Player 1: WASD for movement E to shoot", True, (235, 52, 52))
@@ -27,9 +35,13 @@ counter_right1 = 0
 counter_left1 = 0
 counter_right2 = 0
 counter_left2 = 0
+direction_p1 = "right"
+direction_p2 = "right"
 
 # -------- Main Program Loop -----------
+clock = pygame.time.Clock()
 frame = 0
+
 while run:
     # --- Main event loop
     if title_screen:
@@ -46,19 +58,22 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP:
                 title_screen = False
     else:
+        clock.tick(60)
         screen.blit(bg, (0, 0))
         screen.blit(p1.image, p1.rect)
         screen.blit(p2.image, p2.rect)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:
             p1.move_direction("right")
-            counter_right1 = counter_right1 + 1
+            direction_p1 = "right"
+            counter_right1 += 1
             if counter_right1 == 20:
                 p1.switch_image()
                 counter_right1 = 0
         if keys[pygame.K_a]:
             p1.move_direction("left")
-            counter_left1 = counter_left1 + 1
+            direction_p1 = "left"
+            counter_left1 += 1
             if counter_left1 == 20:
                 p1.switch_image()
                 counter_left1 = 0
@@ -68,13 +83,15 @@ while run:
             p1.move_direction("down")
         if keys[pygame.K_l]:
             p2.move_direction("right")
-            counter_right2 = counter_right2 + 1
+            direction_p2 = "right"
+            counter_right2 += 1
             if counter_right2 == 20:
                 p2.switch_image()
                 counter_right2 = 0
         if keys[pygame.K_j]:
             p2.move_direction("left")
-            counter_left2 = counter_left2 + 1
+            direction_p2 = "left"
+            counter_left2 += 1
             if counter_left2 == 20:
                 p2.switch_image()
                 counter_left2 = 0
@@ -82,9 +99,40 @@ while run:
             p2.move_direction("up")
         if keys[pygame.K_k]:
             p2.move_direction("down")
-        pygame.display.update()
+        if keys[pygame.K_e] and not shoot:
+            initial_bullet_x = p1.rect.centerx
+            initial_bullet_y = p1.rect.centery
+            bullet_x = initial_bullet_x
+            bullet_y = initial_bullet_y
+            direction = direction_p1
+            shoot = True
+        if keys[pygame.K_o] and not shoot2:
+            initial_bullet2_x = p2.rect.centerx
+            initial_bullet2_y = p2.rect.centery
+            bullet2_x = initial_bullet2_x
+            bullet2_y = initial_bullet2_y
+            direction2 = direction_p2
+            shoot2 = True
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
                 run = False
+        if shoot:
+            screen.blit(bullet_image, (bullet_x, bullet_y))
+            if direction == "right":
+                bullet_x += 10
+            else:
+                bullet_x -= 10
+            if bullet_x > 1072 or bullet_x < 0:
+                shoot = False
+        if shoot2:
+            screen.blit(bullet2_image, (bullet2_x, bullet2_y))
+            if direction2 == "right":
+                bullet2_x += 10
+            else:
+                bullet2_x -= 10
+            if bullet2_x > 1072 or bullet2_x < 0:
+                shoot2 = False
+        pygame.display.update()
+        frame += 1
 
 pygame.quit()
