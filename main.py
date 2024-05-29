@@ -17,20 +17,30 @@ bullet_y = 0
 bullet2_image = pygame.image.load("bullet.png")
 bullet2_x = 0
 bullet2_y = 0
+bullet_image_rect = bullet_image.get_rect()
+bullet2_image_rect = bullet2_image.get_rect()
+p1_hearts = 3
+p2_hearts = 3
 
 title_screen = True
 run = True
 shoot = False
 shoot2 = False
+game_over = False
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
 display_instructions_1 = my_font.render("Player 1: WASD for movement E to shoot", True, (235, 52, 52))
 display_instructions_2 = my_font.render("Player 2: IJKL for movement O to shoot", True, (235, 52, 52))
 display_rule = my_font.render("Kill the enemy player first to win ", True, (235, 52, 52))
 display_start = my_font.render("Click anywhere to start", True, (235, 52, 52))
+display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
+display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
+display_p1_win = my_font.render("", True, (235, 52, 52))
+display_p2_win = my_font.render("", True, (235, 52, 52))
 
 p1 = Player1(255, 100)
 p2 = Player2(700, 100)
+
 counter_right1 = 0
 counter_left1 = 0
 counter_right2 = 0
@@ -58,6 +68,8 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP:
                 title_screen = False
     else:
+        display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
+        display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         clock.tick(60)
         screen.blit(bg, (0, 0))
         screen.blit(p1.image, p1.rect)
@@ -113,6 +125,12 @@ while run:
             bullet2_y = initial_bullet2_y
             direction2 = direction_p2
             shoot2 = True
+        if bullet_image_rect.colliderect(p2.rect):
+            p2_hearts -= 1
+            display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
+        if bullet2_image_rect.colliderect(p1.rect):
+            p1_hearts -= 1
+            display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
                 run = False
@@ -132,6 +150,15 @@ while run:
                 bullet2_x -= 10
             if bullet2_x > 1072 or bullet2_x < 0:
                 shoot2 = False
+        if p1_hearts == 0:
+            display_p2_win = my_font.render("Player 2 Wins!", True, (235, 52, 52))
+            game_over = True
+        if p2_hearts == 0:
+            display_p1_win = my_font.render("Player 1 Wins!", True, (235, 52, 52))
+            game_over = True
+        if not game_over:
+            screen.blit(display_hearts_1, (0, 0))
+            screen.blit(display_hearts_2, (0, 15))
         pygame.display.update()
         frame += 1
 
