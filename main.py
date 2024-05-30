@@ -14,11 +14,9 @@ bg = pygame.image.load("background.png")
 bullet_image = pygame.image.load("bullet.png")
 bullet_x = 0
 bullet_y = 0
-bullet2_image = pygame.image.load("bullet.png")
+bullet2_image = pygame.image.load("bullet2.png")
 bullet2_x = 0
 bullet2_y = 0
-bullet_image_rect = bullet_image.get_rect()
-bullet2_image_rect = bullet2_image.get_rect()
 p1_hearts = 3
 p2_hearts = 3
 
@@ -27,6 +25,8 @@ run = True
 shoot = False
 shoot2 = False
 game_over = False
+hit = False
+hit2 = False
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
 display_instructions_1 = my_font.render("Player 1: WASD for movement E to shoot", True, (235, 52, 52))
@@ -68,6 +68,8 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP:
                 title_screen = False
     else:
+        bullet_image_rect = bullet_image.get_rect()
+        bullet2_image_rect = bullet2_image.get_rect()
         display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         clock.tick(60)
@@ -125,10 +127,13 @@ while run:
             bullet2_y = initial_bullet2_y
             direction2 = direction_p2
             shoot2 = True
-        if bullet_image_rect.colliderect(p2.rect):
+        if p2.rect.collidepoint(bullet_x, bullet_y) and not hit2:
+            hit2 = True
+            print("hello")
             p2_hearts -= 1
             display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
-        if bullet2_image_rect.colliderect(p1.rect):
+        if p1.rect.collidepoint(bullet2_x, bullet2_y) and not hit:
+            hit = True
             p1_hearts -= 1
             display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         for event in pygame.event.get():  # User did something
@@ -142,6 +147,7 @@ while run:
                 bullet_x -= 10
             if bullet_x > 1072 or bullet_x < 0:
                 shoot = False
+                hit = False
         if shoot2:
             screen.blit(bullet2_image, (bullet2_x, bullet2_y))
             if direction2 == "right":
@@ -150,6 +156,7 @@ while run:
                 bullet2_x -= 10
             if bullet2_x > 1072 or bullet2_x < 0:
                 shoot2 = False
+                hit2 = False
         if p1_hearts == 0:
             display_p2_win = my_font.render("Player 2 Wins!", True, (235, 52, 52))
             game_over = True
