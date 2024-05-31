@@ -17,8 +17,8 @@ bullet_y = 0
 bullet2_image = pygame.image.load("bullet2.png")
 bullet2_x = 0
 bullet2_y = 0
-p1_hearts = 3
-p2_hearts = 3
+p1_hearts = 5
+p2_hearts = 5
 
 title_screen = True
 run = True
@@ -68,14 +68,10 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP:
                 title_screen = False
     else:
-        bullet_image_rect = bullet_image.get_rect()
-        bullet2_image_rect = bullet2_image.get_rect()
         display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         clock.tick(60)
         screen.blit(bg, (0, 0))
-        screen.blit(p1.image, p1.rect)
-        screen.blit(p2.image, p2.rect)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d]:
             p1.move_direction("right")
@@ -129,7 +125,6 @@ while run:
             shoot2 = True
         if p2.rect.collidepoint(bullet_x, bullet_y) and not hit2:
             hit2 = True
-            print("hello")
             p2_hearts -= 1
             display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         if p1.rect.collidepoint(bullet2_x, bullet2_y) and not hit:
@@ -147,7 +142,7 @@ while run:
                 bullet_x -= 10
             if bullet_x > 1072 or bullet_x < 0:
                 shoot = False
-                hit = False
+                hit2 = False
         if shoot2:
             screen.blit(bullet2_image, (bullet2_x, bullet2_y))
             if direction2 == "right":
@@ -156,16 +151,21 @@ while run:
                 bullet2_x -= 10
             if bullet2_x > 1072 or bullet2_x < 0:
                 shoot2 = False
-                hit2 = False
-        if p1_hearts == 0:
+                hit = False
+        if p1_hearts <= 0 or p2_hearts <= 0:
             display_p2_win = my_font.render("Player 2 Wins!", True, (235, 52, 52))
-            game_over = True
-        if p2_hearts == 0:
             display_p1_win = my_font.render("Player 1 Wins!", True, (235, 52, 52))
             game_over = True
-        if not game_over:
+        if game_over:
+            if p1_hearts <= 0:
+                screen.blit(display_p2_win, (500, 200))
+            if p2_hearts <= 0:
+                screen.blit(display_p1_win, (500, 200))
+        else:
             screen.blit(display_hearts_1, (0, 0))
             screen.blit(display_hearts_2, (0, 15))
+            screen.blit(p1.image, p1.rect)
+            screen.blit(p2.image, p2.rect)
         pygame.display.update()
         frame += 1
 
