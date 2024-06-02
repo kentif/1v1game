@@ -1,6 +1,9 @@
 import pygame
+import random
+import time
 from player_1 import Player1
 from player_2 import Player2
+from energydrink import Energydrink
 
 pygame.init()
 pygame.font.init()
@@ -27,6 +30,10 @@ shoot2 = False
 game_over = False
 hit = False
 hit2 = False
+show_energy_drink = False
+current_time = time.time()
+random_time = random.randint(3, 10)
+
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
 display_instructions_1 = my_font.render("Player 1: WASD for movement E to shoot", True, (235, 52, 52))
@@ -40,6 +47,7 @@ display_p2_win = my_font.render("", True, (235, 52, 52))
 
 p1 = Player1(255, 100)
 p2 = Player2(700, 100)
+eg = Energydrink(-100, -100)
 
 counter_right1 = 0
 counter_left1 = 0
@@ -68,6 +76,8 @@ while run:
             if event.type == pygame.MOUSEBUTTONUP:
                 title_screen = False
     else:
+        elapsed_time = time.time() - current_time
+        time_remaining = 10 - elapsed_time
         display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         clock.tick(60)
@@ -152,6 +162,17 @@ while run:
             if bullet2_x > 1072 or bullet2_x < 0:
                 shoot2 = False
                 hit = False
+        if time_remaining <= random_time and not show_energy_drink:
+            show_energy_drink = True
+            eg.set_location(random.randint(40, 800), random.randint(40, 400))
+            energy_drink_timer = time.time()
+        if show_energy_drink:
+            if p1.rect.colliderect(eg.rect):
+                p1_hearts += 2
+                eg = Energydrink(-100, -100)
+            if p2.rect.colliderect(eg.rect):
+                p2_hearts += 2
+                eg = Energydrink(-100, -100)
         if p1_hearts <= 0 or p2_hearts <= 0:
             display_p2_win = my_font.render("Player 2 Wins!", True, (235, 52, 52))
             display_p1_win = my_font.render("Player 1 Wins!", True, (235, 52, 52))
@@ -162,6 +183,8 @@ while run:
             if p2_hearts <= 0:
                 screen.blit(display_p1_win, (500, 200))
         else:
+            if show_energy_drink:
+                screen.blit(eg.image, eg.rect)
             screen.blit(display_hearts_1, (0, 0))
             screen.blit(display_hearts_2, (0, 15))
             screen.blit(p1.image, p1.rect)
