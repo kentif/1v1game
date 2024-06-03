@@ -10,7 +10,7 @@ pygame.font.init()
 my_font = pygame.font.SysFont('Arial', 20)
 pygame.display.set_caption("1v1")
 
-size = (1072, 600)
+size = (816, 624)
 screen = pygame.display.set_mode(size)
 
 bg = pygame.image.load("background.png")
@@ -159,7 +159,7 @@ while run:
                 bullet2_x += 10
             else:
                 bullet2_x -= 10
-            if bullet2_x > 1072 or bullet2_x < 0:
+            if bullet2_x > 816 or bullet2_x < 0:
                 shoot2 = False
                 hit = False
         if time_remaining <= random_time and not show_energy_drink:
@@ -168,6 +168,7 @@ while run:
             energy_drink_timer = time.time()
         if show_energy_drink:
             if p1.rect.colliderect(eg.rect):
+                p1.image = pygame.transform.scale(p1.image_size, (int(p1.image_size[0]*2), int(p1.image_size[1]*2)))
                 p1_hearts += 2
                 eg = Energydrink(-100, -100)
             if p2.rect.colliderect(eg.rect):
