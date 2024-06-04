@@ -7,6 +7,7 @@ from energydrink import Energydrink
 
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 my_font = pygame.font.SysFont('Arial', 20)
 pygame.display.set_caption("1v1")
 
@@ -22,6 +23,7 @@ bullet2_x = 0
 bullet2_y = 0
 p1_hearts = 5
 p2_hearts = 5
+laser_sound = pygame.mixer.Sound("laserzap.mp3")
 
 title_screen = True
 run = True
@@ -120,6 +122,7 @@ while run:
         if keys[pygame.K_k]:
             p2.move_direction("down")
         if keys[pygame.K_e] and not shoot:
+            laser_sound.play()
             initial_bullet_x = p1.rect.centerx
             initial_bullet_y = p1.rect.centery
             bullet_x = initial_bullet_x
@@ -127,6 +130,7 @@ while run:
             direction = direction_p1
             shoot = True
         if keys[pygame.K_o] and not shoot2:
+            laser_sound.play()
             initial_bullet2_x = p2.rect.centerx
             initial_bullet2_y = p2.rect.centery
             bullet2_x = initial_bullet2_x
@@ -168,7 +172,6 @@ while run:
             energy_drink_timer = time.time()
         if show_energy_drink:
             if p1.rect.colliderect(eg.rect):
-                p1.image = pygame.transform.scale(p1.image_size, (int(p1.image_size[0]*2), int(p1.image_size[1]*2)))
                 p1_hearts += 2
                 eg = Energydrink(-100, -100)
             if p2.rect.colliderect(eg.rect):
