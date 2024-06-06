@@ -176,7 +176,6 @@ while run:
             energy_drink_timer = time.time()
         if show_energy_drink:
             if p1.rect.colliderect(eg.rect):
-                p1.increase_image()
                 healed_sound.play()
                 p1_hearts += 2
                 eg = Energydrink(-100, -100)
