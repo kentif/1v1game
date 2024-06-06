@@ -24,6 +24,8 @@ bullet2_y = 0
 p1_hearts = 5
 p2_hearts = 5
 laser_sound = pygame.mixer.Sound("laserzap.mp3")
+ow_sound = pygame.mixer.Sound("ow.mp3")
+healed_sound = pygame.mixer.Sound("healed.mp3")
 
 title_screen = True
 run = True
@@ -138,10 +140,12 @@ while run:
             direction2 = direction_p2
             shoot2 = True
         if p2.rect.collidepoint(bullet_x, bullet_y) and not hit2:
+            ow_sound.play()
             hit2 = True
             p2_hearts -= 1
             display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         if p1.rect.collidepoint(bullet2_x, bullet2_y) and not hit:
+            ow_sound.play()
             hit = True
             p1_hearts -= 1
             display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
@@ -172,8 +176,11 @@ while run:
             energy_drink_timer = time.time()
         if show_energy_drink:
             if p1.rect.colliderect(eg.rect):
+                p1.increase_image()
+                healed_sound.play()
                 p1_hearts += 2
                 eg = Energydrink(-100, -100)
+                healed_sound.play()
             if p2.rect.colliderect(eg.rect):
                 p2_hearts += 2
                 eg = Energydrink(-100, -100)
