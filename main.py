@@ -36,7 +36,7 @@ hit = False
 hit2 = False
 show_energy_drink = False
 current_time = time.time()
-random_time = random.randint(3, 10)
+random_time = random.randint(5, 10)
 
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
@@ -49,8 +49,8 @@ display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (2
 display_p1_win = my_font.render("", True, (235, 52, 52))
 display_p2_win = my_font.render("", True, (235, 52, 52))
 
-p1 = Player1(255, 100)
-p2 = Player2(700, 100)
+p1 = Player1(255, 150)
+p2 = Player2(700, 150)
 eg = Energydrink(-100, -100)
 
 counter_right1 = 0
@@ -68,11 +68,11 @@ while run:
     # --- Main event loop
     if title_screen:
         screen.blit(bg, (0, 0))
-        screen.blit(display_name, (330, 200))
-        screen.blit(display_instructions_1, (330, 230))
-        screen.blit(display_instructions_2, (330, 250))
-        screen.blit(display_rule, (330, 270))
-        screen.blit(display_start, (330, 290))
+        screen.blit(display_name, (280, 200))
+        screen.blit(display_instructions_1, (280, 230))
+        screen.blit(display_instructions_2, (280, 250))
+        screen.blit(display_rule, (280, 270))
+        screen.blit(display_start, (280, 290))
         pygame.display.update()
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
@@ -189,9 +189,9 @@ while run:
             game_over = True
         if game_over:
             if p1_hearts <= 0:
-                screen.blit(display_p2_win, (500, 200))
+                screen.blit(display_p2_win, (280, 250))
             if p2_hearts <= 0:
-                screen.blit(display_p1_win, (500, 200))
+                screen.blit(display_p1_win, (280, 250))
         else:
             if show_energy_drink:
                 screen.blit(eg.image, eg.rect)
