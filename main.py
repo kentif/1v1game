@@ -4,6 +4,7 @@ import time
 from player_1 import Player1
 from player_2 import Player2
 from energydrink import Energydrink
+from gun import Gun
 
 pygame.init()
 pygame.font.init()
@@ -23,9 +24,12 @@ bullet2_x = 0
 bullet2_y = 0
 p1_hearts = 5
 p2_hearts = 5
+p1_bullet_dmg = 1
+p2_bullet_dmg = 1
 laser_sound = pygame.mixer.Sound("laserzap.mp3")
 ow_sound = pygame.mixer.Sound("ow.mp3")
 healed_sound = pygame.mixer.Sound("healed.mp3")
+gun_upgrade_sound = pygame.mixer.Sound("gunupgraded.mp3")
 
 title_screen = True
 run = True
@@ -35,8 +39,10 @@ game_over = False
 hit = False
 hit2 = False
 show_energy_drink = False
+show_gun_upgrade = False
 current_time = time.time()
 random_time = random.randint(5, 10)
+random_time2 = random.randint(5, 10)
 
 
 display_name = my_font.render("Welcome to 1v1", True, (235, 52, 52))
@@ -49,9 +55,10 @@ display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (2
 display_p1_win = my_font.render("", True, (235, 52, 52))
 display_p2_win = my_font.render("", True, (235, 52, 52))
 
-p1 = Player1(255, 150)
-p2 = Player2(700, 150)
+p1 = Player1(255, 170)
+p2 = Player2(700, 170)
 eg = Energydrink(-100, -100)
+gun = Gun(-100, -100)
 
 counter_right1 = 0
 counter_left1 = 0
@@ -142,12 +149,12 @@ while run:
         if p2.rect.collidepoint(bullet_x, bullet_y) and not hit2:
             ow_sound.play()
             hit2 = True
-            p2_hearts -= 1
+            p2_hearts -= p1_bullet_dmg
             display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         if p1.rect.collidepoint(bullet2_x, bullet2_y) and not hit:
             ow_sound.play()
             hit = True
-            p1_hearts -= 1
+            p1_hearts -= p2_bullet_dmg
             display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
         for event in pygame.event.get():  # User did something
             if event.type == pygame.QUIT:  # If user clicked close
@@ -172,7 +179,7 @@ while run:
                 hit = False
         if time_remaining <= random_time and not show_energy_drink:
             show_energy_drink = True
-            eg.set_location(random.randint(40, 800), random.randint(40, 400))
+            eg.set_location(random.randint(40, 800), random.randint(170, 400))
             energy_drink_timer = time.time()
         if show_energy_drink:
             if p1.rect.colliderect(eg.rect):
@@ -183,6 +190,19 @@ while run:
             if p2.rect.colliderect(eg.rect):
                 p2_hearts += 2
                 eg = Energydrink(-100, -100)
+        if time_remaining <= random_time2 and not show_gun_upgrade:
+            show_gun_upgrade = True
+            gun.set_location(random.randint(40, 800), random.randint(170, 400))
+            gun_upgrade_timer = time.time()
+        if show_gun_upgrade:
+            if p1.rect.colliderect(gun.rect):
+                gun_upgrade_sound.play()
+                p1_bullet_dmg = 2
+                gun = Gun(-100, -100)
+            if p2.rect.colliderect(gun.rect):
+                gun_upgrade_sound.play()
+                p2_bullet_dmg = 2
+                eg = Gun(-100, -100)
         if p1_hearts <= 0 or p2_hearts <= 0:
             display_p2_win = my_font.render("Player 2 Wins!", True, (235, 52, 52))
             display_p1_win = my_font.render("Player 1 Wins!", True, (235, 52, 52))
@@ -195,6 +215,8 @@ while run:
         else:
             if show_energy_drink:
                 screen.blit(eg.image, eg.rect)
+            if show_gun_upgrade:
+                screen.blit(gun.image, gun.rect)
             screen.blit(display_hearts_1, (0, 0))
             screen.blit(display_hearts_2, (0, 15))
             screen.blit(p1.image, p1.rect)
