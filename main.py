@@ -3,7 +3,7 @@ import random
 import time
 from player_1 import Player1
 from player_2 import Player2
-from energydrink import Energydrink
+from energy_drink import Energydrink
 from gun import Gun
 
 pygame.init()
@@ -27,7 +27,7 @@ p2_hearts = 5
 p1_bullet_dmg = 1
 p2_bullet_dmg = 1
 laser_sound = pygame.mixer.Sound("laserzap.mp3")
-ow_sound = pygame.mixer.Sound("ow.mp3")
+got_hit_sound = pygame.mixer.Sound("ow.mp3")
 healed_sound = pygame.mixer.Sound("healed.mp3")
 gun_upgrade_sound = pygame.mixer.Sound("gunupgraded.mp3")
 
@@ -147,12 +147,12 @@ while run:
             direction2 = direction_p2
             shoot2 = True
         if p2.rect.collidepoint(bullet_x, bullet_y) and not hit2:
-            ow_sound.play()
+            got_hit_sound.play()
             hit2 = True
             p2_hearts -= p1_bullet_dmg
             display_hearts_2 = my_font.render("Player 2 Hearts: " + str(p2_hearts), True, (235, 52, 52))
         if p1.rect.collidepoint(bullet2_x, bullet2_y) and not hit:
-            ow_sound.play()
+            got_hit_sound.play()
             hit = True
             p1_hearts -= p2_bullet_dmg
             display_hearts_1 = my_font.render("Player 1 Hearts: " + str(p1_hearts), True, (235, 52, 52))
